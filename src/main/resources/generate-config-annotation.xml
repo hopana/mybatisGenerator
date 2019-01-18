@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <properties resource="package/to/your/data_source.properties"/>
+
+    <context id="context_mysql" defaultModelType="flat" targetRuntime="MyBatis3">
+        <property name="javaFileEncoding" value="UTF-8"/>
+
+        <!-- CommentWithAnnotationCommentGenerator -->
+        <commentGenerator type="com.hp.mybatis.plugins.comment.AnnotationCommentGenerator">
+            <property name="fieldAnnotationFullyQualifiedNames" value="one.your.customer.FieldAnnotationClass,another.your.customer.FieldAnnotationClass"/>
+            <property name="classAnnotationFullyQualifiedNames" value="one.your.customer.ClassAnnotationClass,another.your.customer.ClassAnnotationClass"/>
+        </commentGenerator>
+
+        <jdbcConnection driverClass="${driverClass}" connectionURL="${connectionURL}" userId="${userId}" password="${password}">
+            <!-- better keep this -->
+            <property name="useInformationSchema" value="true"/>
+        </jdbcConnection>
+
+        <javaModelGenerator targetPackage="your.model" targetProject="/path/to/your/project/src/main/java">
+        </javaModelGenerator>
+
+
+        <sqlMapGenerator targetPackage="your.mapper" targetProject="src/main/resources">
+        </sqlMapGenerator>
+
+
+        <javaClientGenerator targetPackage="your.mapper" type="ANNOTATEDMAPPER" targetProject="src/main/java">
+        </javaClientGenerator>
+
+        <table tableName="your_table" domainObjectName="YourDomain">
+        </table>
+    </context>
+</generatorConfiguration>
