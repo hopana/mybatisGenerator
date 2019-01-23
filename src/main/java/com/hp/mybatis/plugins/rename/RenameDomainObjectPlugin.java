@@ -1,15 +1,15 @@
 package com.hp.mybatis.plugins.rename;
 
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
-import static org.mybatis.generator.internal.util.messages.Messages.getString;
+import org.mybatis.generator.api.IntrospectedTable;
+import org.mybatis.generator.api.PluginAdapter;
 
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.mybatis.generator.api.PluginAdapter;
-import org.mybatis.generator.api.IntrospectedTable;
+import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 /**
  * This plugin demonstrates overriding the initialized() method to rename the
@@ -37,19 +37,20 @@ import org.mybatis.generator.api.IntrospectedTable;
  * @author Jeff Butler
  * 
  */
-public class RenameJavaMapperPlugin extends PluginAdapter {
+public class RenameDomainObjectPlugin extends PluginAdapter {
     private String searchString;
     private String replaceString;
     private Pattern pattern;
 
 
-    public RenameJavaMapperPlugin() {
+    public RenameDomainObjectPlugin() {
 	}
 
+	@Override
 	public boolean validate(List<String> warnings) {
 
-        searchString = properties.getProperty("searchString"); //$NON-NLS-1$
-        replaceString = properties.getProperty("replaceString"); //$NON-NLS-1$
+        searchString = properties.getProperty("searchString");
+        replaceString = properties.getProperty("replaceString");
 
         boolean valid = stringHasValue(searchString)
                 && stringHasValue(replaceString);
@@ -58,14 +59,14 @@ public class RenameJavaMapperPlugin extends PluginAdapter {
             pattern = Pattern.compile(searchString);
         } else {
             if (!stringHasValue(searchString)) {
-                warnings.add(getString("ValidationError.18", //$NON-NLS-1$
-                        "RenameExampleClassPlugin", //$NON-NLS-1$
-                        "searchString")); //$NON-NLS-1$
+                warnings.add(getString("ValidationError.18",
+                        "RenameExampleClassPlugin",
+                        "searchString"));
             }
             if (!stringHasValue(replaceString)) {
-                warnings.add(getString("ValidationError.18", //$NON-NLS-1$
-                        "RenameExampleClassPlugin", //$NON-NLS-1$
-                        "replaceString")); //$NON-NLS-1$
+                warnings.add(getString("ValidationError.18",
+                        "RenameExampleClassPlugin",
+                        "replaceString"));
             }
         }
 
@@ -74,14 +75,14 @@ public class RenameJavaMapperPlugin extends PluginAdapter {
 
     @Override
     public void initialized(IntrospectedTable introspectedTable) {
-        String oldType = introspectedTable.getMyBatis3JavaMapperType();
-        Matcher matcher = pattern.matcher(oldType);
-        oldType = matcher.replaceAll(replaceString);
+        String oldType = introspectedTable.getFullyQualifiedTable().getDomainObjectName();
+        // Matcher matcher = pattern.matcher(oldType);
+        // oldType = matcher.replaceAll(replaceString);
 
         // 自己临时添加
         oldType = oldType.replaceAll("T", "");
 
-        introspectedTable.setMyBatis3JavaMapperType(oldType);
+        //introspectedTable.getmo(oldType);
 
     }
 }
